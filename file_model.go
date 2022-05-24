@@ -2,9 +2,27 @@ package filemanager
 
 import (
 	"github.com/google/uuid"
-	"io/fs"
 	"time"
 )
+
+/*
+Use Cases:
+Create new file:
+- Define a file name
+- give as input a file with :
+	- physical path:
+	- input buffer
+	- bytes chunks
+- generate a new UUID
+- register the file in the DB through GORM
+- start copying the file to the destination (only 1 destination! support for multiple is not planned)
+- there is a status completion for each destination
+-
+Move FIle:
+
+
+File Explorer
+*/
 
 /*
 	Ideal ar fi ca file manager-ul acesta sa aiba mai multe functii si drivere...
@@ -22,6 +40,25 @@ import (
 		-
 		etc...
 */
+
+type FileInterface interface {
+	Save()
+	Copy()
+	Move()
+	Delete()
+	Create()
+	Touch()
+	List()
+
+	// Do we need directory manager?!
+	// if it's called file manager, then it should be related only to files...
+	// how they are saved, should not interest the user?!
+	// well, sometimes the user will want to indicate where to save a specific file...
+	// but that's other thing, it's not related to making a directory or deleting it...
+	// the user should be interested in saving the files and getting them back! that's it!
+	MkDir()
+	DeleteDir()
+}
 
 const (
 	SaveToDB   = 1
@@ -58,10 +95,12 @@ type File struct {
 	// Is saved physically or in database, if in database, then it will be stored in another table
 	IsPhysical bool
 
+	// these are the locations where the file is stored
+	// there can be multiple ones, having as a backup option or for read performance...
+	Locations []Location
+
 	//EncryptionPassword string
 	//EncryptionAlgo     string
-
-	// TODO: sa poti salva in mai multe loc-uri deodata avind acelasi ID
 
 	CreatedAt *time.Time `gorm:"type:timestamptz;null;index:idx_core_dates"`
 	UpdatedAt *time.Time `gorm:"type:timestamptz;null;index:idx_core_dates"`
@@ -75,35 +114,6 @@ type File struct {
 }
 
 func (File) TableName() string {
+	// TODO: table name should be defined in the code, as instance name...
 	return "files"
-}
-
-/*
-We should have functions that:
-- Allow us to read and save a file in chunks, the reading will not be performed instantly in the memory, but it will be read
-  in chunks... and also save in chunks!
-- Allow us to save files from memory
-*/
-
-type SaveFileOptions struct {
-	// Name -> is optional, if not indicated, the file name will be taken
-	Name string
-	// Save in database -> in chunks
-	SaveInDB    bool
-	DBChunkSize int64
-	// by indicating full file path, it will be read from there!
-	FullFilePath string
-	// by indicating File, it will be read from there
-	File fs.File
-}
-
-func SaveFile(saveOptions SaveFileOptions) (*File, error) {
-	/*
-		1. Get a specific file storage location where all files will be saved....
-		2. Make a solution that each file will have a very large and mostly infinite ID
-		3. create additional primary keys?
-		4. think of clustering...
-		5.
-	*/
-
 }
