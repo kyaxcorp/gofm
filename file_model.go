@@ -41,7 +41,7 @@ File Explorer
 		etc...
 */
 
-type FileInterface interface {
+type DriverFileInterface interface {
 	Save()
 	Copy()
 	Move()
@@ -98,6 +98,12 @@ type File struct {
 	// these are the locations where the file is stored
 	// there can be multiple ones, having as a backup option or for read performance...
 	Locations []Location
+	// TODO store meta data about the current file in the locations!
+	// TODO: should we create a MetaLocation?! which will contain info about how is stored in the location
+
+	// Here we store the reference to the file manager
+	// TODO: should we make it private?!
+	FileManager *FileManager
 
 	//EncryptionPassword string
 	//EncryptionAlgo     string
@@ -113,7 +119,7 @@ type File struct {
 	DeletedByID *uuid.UUID `gorm:"type:uuid;null"`
 }
 
-func (File) TableName() string {
-	// TODO: table name should be defined in the code, as instance name...
-	return "files"
+// TableName -> Get the Database table name from the file manager
+func (f *File) TableName() string {
+	return f.FileManager.GetFilesDBTableName()
 }
