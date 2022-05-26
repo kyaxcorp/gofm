@@ -56,48 +56,41 @@ type DriverFileInterface interface {
 	// well, sometimes the user will want to indicate where to save a specific file...
 	// but that's other thing, it's not related to making a directory or deleting it...
 	// the user should be interested in saving the files and getting them back! that's it!
-	MkDir()
-	DeleteDir()
-}
-
-const (
-	SaveToDB   = 1
-	SaveToDisk = 2
-	// Add other Save locations later on...
-)
-
-type SaveLocation struct {
-	Database bool
-	Disk     bool
-	// TODO: where can we add destination settings
+	//MkDir()
+	//DeleteDir()
 }
 
 type File struct {
 	ID uuid.UUID `gorm:"primaryKey;type:uuid;not null;<-:create;default:gen_random_uuid()"`
 
 	// File Name
-	Name string
+	Name string `gorm:"size:255"`
+	// FullName contains the Name+Extension
+	FullName string `gorm:"size:255"`
+	// It's the FullName of the file but containing the original name of it!
+	OriginalName string `gorm:"size:255"`
+
 	// File Description
-	Description string
+	Description string `gorm:"size:255"`
 	// Size Bytes
-	Size string
+	Size int64
 	// CategoryID -> also an optional field
 	CategoryID uuid.UUID
 	// Extension -> xls, doc etc...
-	Extension string
-	// application/json, application/text, etc...
-	Type string
-	// Physical path of the file on the disk
-	Path string
+	Extension string `gorm:"size:30"`
+	// Type -> application/json, application/text, etc...
+	Type string `gorm:"size:50"`
+
 	// If it's related to some Module, it's just a reference
-	RelatedToID *uuid.UUID
-	RelatedName string
-	// Is saved physically or in database, if in database, then it will be stored in another table
-	IsPhysical bool
+	// the user can save the id's of the files in other records or in a separate table...
+	// yes, it's a performance degradation querying
+	//RelatedToID *uuid.UUID
+	//RelatedName string
 
 	// these are the locations where the file is stored
 	// there can be multiple ones, having as a backup option or for read performance...
 	Locations []Location
+
 	// TODO store meta data about the current file in the locations!
 	// TODO: should we create a MetaLocation?! which will contain info about how is stored in the location
 
@@ -110,8 +103,6 @@ type File struct {
 
 	CreatedAt *time.Time `gorm:"type:timestamptz;null;index:idx_core_dates"`
 	UpdatedAt *time.Time `gorm:"type:timestamptz;null;index:idx_core_dates"`
-
-	IsDeleted bool       `gorm:"type:bool;not null;default:false;index:idx_core_bool"`
 	DeletedAt *time.Time `gorm:"type:timestamptz;null;index:idx_core_dates"`
 
 	CreatedByID *uuid.UUID `gorm:"type:uuid;null"`
