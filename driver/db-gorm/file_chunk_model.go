@@ -1,4 +1,4 @@
-package filemanager
+package db_gorm
 
 import "github.com/google/uuid"
 

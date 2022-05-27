@@ -14,6 +14,14 @@ type FileManager struct {
 	DBTableName string
 	TablePrefix string
 	// TODO: add prefix to the tables
+
+	// TODO: check if this is ok to have!
+	// fmError -> is the file manager error
+	fmError error
+
+	// TODO: check if this is ok to have!
+	// internalError -> is raised by the used applications/drivers
+	internalError error
 }
 
 // getDBTablePrefix -> return the database table prefix

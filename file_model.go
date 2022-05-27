@@ -96,7 +96,7 @@ type File struct {
 
 	// Here we store the reference to the file manager
 	// TODO: should we make it private?!
-	FileManager *FileManager
+	fileManager *FileManager
 
 	//EncryptionPassword string
 	//EncryptionAlgo     string
@@ -112,5 +112,5 @@ type File struct {
 
 // TableName -> Get the Database table name from the file manager
 func (f *File) TableName() string {
-	return f.FileManager.GetFilesDBTableName()
+	return f.fileManager.GetFilesDBTableName()
 }
