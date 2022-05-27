@@ -1,4 +1,4 @@
-module github.com/kyaxcorp/filemanager
+module github.com/kyaxcorp/gofm
 
 go 1.17
 

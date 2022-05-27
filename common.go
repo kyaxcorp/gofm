@@ -1,4 +1,4 @@
-package filemanager
+package gofm
 
 // Let's define all necessary functions
 /*

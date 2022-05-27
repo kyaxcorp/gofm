@@ -1,4 +1,4 @@
-package filemanager
+package gofm
 
 /*
 We should have functions that:

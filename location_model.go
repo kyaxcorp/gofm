@@ -1,4 +1,4 @@
-package filemanager
+package gofm
 
 type Location struct {
 	// this is used driver name
