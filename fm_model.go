@@ -2,8 +2,10 @@ package filemanager
 
 import "gorm.io/gorm"
 
+// FileManager - metadata will be stored
+//
 type FileManager struct {
-	// This is where info about the files will be stored
+	// The DB Client
 	DBClient      *gorm.DB
 	DBAutoMigrate bool
 
