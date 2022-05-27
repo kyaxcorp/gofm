@@ -1,6 +1,13 @@
 package filemanager
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
+
+var (
+	// DBFilesTableName -> can be changed as needed...
+	DBFilesTableName = "fm_files"
+)
 
 // FileManager - metadata will be stored
 //
@@ -11,8 +18,8 @@ type FileManager struct {
 
 	Name string
 	// this is the database table name
-	DBTableName string
-	TablePrefix string
+	//DBTableName string // TODO: what is it for?!
+	//TablePrefix string
 	// TODO: add prefix to the tables
 
 	// TODO: check if this is ok to have!
@@ -24,20 +31,25 @@ type FileManager struct {
 	internalError error
 }
 
-// getDBTablePrefix -> return the database table prefix
+func GetFilesDBTableName() string {
+	return DBFilesTableName
+}
+
+/*// getDBTablePrefix -> return the database table prefix
 func (fm *FileManager) getDBTablePrefix() string {
 	if fm.TablePrefix != "" {
 		return fm.TablePrefix + "_"
 	}
 	return ""
-}
+}*/
 
-// GetFilesDBTableName - Here we store information about our files
+/*// GetFilesDBTableName - Here we store information about our files
 func (fm *FileManager) GetFilesDBTableName() string {
+	log.Println("GetFilesDBTableName")
 	return fm.getDBTablePrefix() + "fm_files"
 }
 
 // GetLocationsDBTableName - here we store information a
 func (fm *FileManager) GetLocationsDBTableName() string {
 	return fm.getDBTablePrefix() + "fm_locations"
-}
+}*/

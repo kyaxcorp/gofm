@@ -6,21 +6,14 @@ import (
 	"gorm.io/gorm"
 )
 
-type FindOptions struct {
+type FindFileOptions struct {
 	ID   uuid.UUID
 	Name string
 }
 
-// setError -> return the fmError for code simplicity
-func (fm *FileManager) setError(fmError, intError error) error {
-	fm.fmError = fmError
-	fm.internalError = intError
-	return fm.fmError
-}
-
 // FindFile -> it will search for the described file in the database
 // if nothing is found, an error will be returned
-func (fm *FileManager) FindFile(o FindOptions) (*File, error) {
+func (fm *FileManager) FindFile(o FindFileOptions) (*File, error) {
 	var file *File
 	dbResult := fm.db().Where(o).First(file)
 	if dbResult.Error != nil {
@@ -33,8 +26,13 @@ func (fm *FileManager) FindFile(o FindOptions) (*File, error) {
 	return file, nil
 }
 
+type FindFilesOptions struct {
+	ID   uuid.UUID
+	Name string
+}
+
 // FindFiles -> TODO:
-func (fm *FileManager) FindFiles(o FindOptions) *File {
+func (fm *FileManager) FindFiles(o FindFilesOptions) *File {
 	var file File
 	fm.db().Where(o).First(&file)
 	return nil

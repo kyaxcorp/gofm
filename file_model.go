@@ -61,17 +61,19 @@ type DriverFileInterface interface {
 }
 
 type File struct {
-	ID uuid.UUID `gorm:"primaryKey;type:uuid;not null;<-:create;default:gen_random_uuid()"`
+	// InstanceName, partitioning can be setup!
+	FMInstance string    `gorm:"primaryKey;type:varchar(25);not null;<-:create"`
+	ID         uuid.UUID `gorm:"primaryKey;type:uuid;not null;<-:create;default:gen_random_uuid()"`
 
 	// File Name
-	Name string `gorm:"size:255"`
+	Name string `gorm:"size:256"`
 	// FullName contains the Name+Extension
-	FullName string `gorm:"size:255"`
+	FullName string `gorm:"size:256"`
 	// It's the FullName of the file but containing the original name of it!
-	OriginalName string `gorm:"size:255"`
+	OriginalName string `gorm:"size:256"`
 
 	// File Description
-	Description string `gorm:"size:255"`
+	Description string `gorm:"size:256"`
 	// Size Bytes
 	Size int64
 	// CategoryID -> also an optional field
@@ -89,14 +91,13 @@ type File struct {
 
 	// these are the locations where the file is stored
 	// there can be multiple ones, having as a backup option or for read performance...
-	Locations []Location
+	Locations Locations
 
 	// TODO store meta data about the current file in the locations!
 	// TODO: should we create a MetaLocation?! which will contain info about how is stored in the location
 
 	// Here we store the reference to the file manager
-	// TODO: should we make it private?!
-	fileManager *FileManager
+	fileManager *FileManager `gorm:"-"`
 
 	//EncryptionPassword string
 	//EncryptionAlgo     string
@@ -111,6 +112,8 @@ type File struct {
 }
 
 // TableName -> Get the Database table name from the file manager
+// https://gorm.io/docs/conventions.html -> NOTE TableName doesn’t allow dynamic name, its result will be cached for future, to use dynamic name, you can use Scopes, for example:
 func (f *File) TableName() string {
-	return f.fileManager.GetFilesDBTableName()
+	return GetFilesDBTableName()
+	//return f.fileManager.GetFilesDBTableName()
 }

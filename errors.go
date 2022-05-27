@@ -12,3 +12,10 @@ var (
 
 	//
 )
+
+// setError -> return the fmError for code simplicity
+func (fm *FileManager) setError(fmError, intError error) error {
+	fm.fmError = fmError
+	fm.internalError = intError
+	return fm.fmError
+}

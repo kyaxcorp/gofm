@@ -1,5 +1,7 @@
 package filemanager
 
+import "log"
+
 // GetInstance -> it should be called once somewhere in the app?!
 // It checks for table structure
 func GetInstance(fm ...*FileManager) *FileManager {
@@ -12,6 +14,8 @@ func GetInstance(fm ...*FileManager) *FileManager {
 		_fm = &FileManager{}
 	}
 
+	log.Println(_fm)
+
 	if _fm.DBAutoMigrate {
 		_fm.DatabaseAutoMigrate()
 	}
@@ -22,8 +26,9 @@ func GetInstance(fm ...*FileManager) *FileManager {
 // DatabaseAutoMigrate - create all necessary tables, alter,add columns
 func (fm *FileManager) DatabaseAutoMigrate() {
 	// Migrate if necessary
-	fm.DBClient.AutoMigrate(
+	fm.db().AutoMigrate(
 		&File{},
-		&Location{},
+		//&File{fileManager: fm},
+		//&Location{fileManager: fm},
 	)
 }

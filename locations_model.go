@@ -1,32 +1,25 @@
 package filemanager
 
-type Location struct {
-	// this is used driver name
-	DriverType string
+import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
+)
 
-	fileManager *FileManager `gorm:"-"`
+type Locations []Location
 
-	// the driver is the one that creates the bridge between the client and the destination server (location)
-	// this is the instance with which the will interact
-	driver DriverFileInterface
-}
-
-// TableName -> Get the Database table name from the file manager
-func (f *Location) TableName() string {
-	return ""
-	//return f.fileManager.GetLocationsDBTableName()
-}
-
-/*
 // Scan -> this is the func which is called when it's necessary to read from the Database to
 // the defined variable with this type
-func (l *Location) Scan(value interface{}) error {
+func (l *Locations) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 	if !ok {
 		return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
 	}
 	// Define a temporary variable
-	var data Location
+	var data Locations
 	// JSON Decode into the temporary variable
 	err := json.Unmarshal(bytes, &data)
 	// Check if it's ok...
@@ -36,25 +29,25 @@ func (l *Location) Scan(value interface{}) error {
 		// if ok, set back the obtained value
 		*l = data
 	} else {
-		*l = Location{}
+		*l = Locations{}
 	}
 	return err
 }
 
 // Value -> this is the func which is called when it's necessary to send to Database,
 // the value should be automatically converted to JSON
-func (l Location) Value() (driver.Value, error) {
+func (l Locations) Value() (driver.Value, error) {
 	// Convert the data into Json Bytes
 	return json.Marshal(l)
 }
 
-func (Location) GormDataType() string {
+func (Locations) GormDataType() string {
 	return "bytes"
 }
 
 // GormDBDataType gorm db data type
 // This is the Database data type which is sent to the DB
-func (Location) GormDBDataType(db *gorm.DB, field *schema.Field) string {
+func (Locations) GormDBDataType(db *gorm.DB, field *schema.Field) string {
 	switch db.Dialector.Name() {
 	case "sqlite":
 		return "JSON"
@@ -65,4 +58,3 @@ func (Location) GormDBDataType(db *gorm.DB, field *schema.Field) string {
 	}
 	return ""
 }
-*/
