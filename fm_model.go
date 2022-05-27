@@ -16,6 +16,7 @@ type FileManager struct {
 	DBClient      *gorm.DB
 	DBAutoMigrate bool
 
+	// Name -> the name should be short max 50 chars
 	Name string
 	// this is the database table name
 	//DBTableName string // TODO: what is it for?!

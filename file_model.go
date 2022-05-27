@@ -2,6 +2,7 @@ package filemanager
 
 import (
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -62,26 +63,26 @@ type DriverFileInterface interface {
 
 type File struct {
 	// InstanceName, partitioning can be setup!
-	FMInstance string    `gorm:"primaryKey;type:varchar(25);not null;<-:create"`
-	ID         uuid.UUID `gorm:"primaryKey;type:uuid;not null;<-:create;default:gen_random_uuid()"`
+	FMInstance string    `gorm:"primaryKey;type:varchar(50);not null;<-:create"`
+	ID         uuid.UUID `gorm:"primaryKey;not null;<-:create;default:gen_random_uuid()"`
 
 	// File Name
 	Name string `gorm:"size:256"`
 	// FullName contains the Name+Extension
 	FullName string `gorm:"size:256"`
 	// It's the FullName of the file but containing the original name of it!
-	OriginalName string `gorm:"size:256"`
+	OriginalName string `gorm:"size:256;<-:create"`
 
 	// File Description
 	Description string `gorm:"size:256"`
 	// Size Bytes
-	Size int64
+	Size int64 `gorm:"<-:create"`
 	// CategoryID -> also an optional field
-	CategoryID uuid.UUID
+	CategoryID *uuid.UUID
 	// Extension -> xls, doc etc...
-	Extension string `gorm:"size:30"`
-	// Type -> application/json, application/text, etc...
-	Type string `gorm:"size:50"`
+	Extension string `gorm:"size:30;<-:create"`
+	// ContentType -> application/json, application/text, etc...
+	ContentType string `gorm:"size:50;<-:create"`
 
 	// If it's related to some Module, it's just a reference
 	// the user can save the id's of the files in other records or in a separate table...
@@ -102,13 +103,13 @@ type File struct {
 	//EncryptionPassword string
 	//EncryptionAlgo     string
 
-	CreatedAt *time.Time `gorm:"type:timestamptz;null;index:idx_core_dates"`
-	UpdatedAt *time.Time `gorm:"type:timestamptz;null;index:idx_core_dates"`
-	DeletedAt *time.Time `gorm:"type:timestamptz;null;index:idx_core_dates"`
+	CreatedAt *time.Time `gorm:"null;index:idx_core_dates;<-:create"`
+	UpdatedAt *time.Time `gorm:"null;index:idx_core_dates"`
+	DeletedAt *time.Time `gorm:"null;index:idx_core_dates"`
 
-	CreatedByID *uuid.UUID `gorm:"type:uuid;null"`
-	UpdatedByID *uuid.UUID `gorm:"type:uuid;null"`
-	DeletedByID *uuid.UUID `gorm:"type:uuid;null"`
+	CreatedByID *uuid.UUID `gorm:"null;<-:create"`
+	UpdatedByID *uuid.UUID `gorm:"null"`
+	DeletedByID *uuid.UUID `gorm:"null"`
 }
 
 // TableName -> Get the Database table name from the file manager
@@ -116,4 +117,8 @@ type File struct {
 func (f *File) TableName() string {
 	return GetFilesDBTableName()
 	//return f.fileManager.GetFilesDBTableName()
+}
+
+func (f *File) db() *gorm.DB {
+	return f.fileManager.db()
 }

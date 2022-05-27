@@ -30,5 +30,6 @@ func TestFileManager(t *testing.T) {
 
 	file := fm.NewFile()
 	file.Name = "my super File"
+	file.Description = "my description"
 	file.Save()
 }
