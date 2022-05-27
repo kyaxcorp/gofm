@@ -1,4 +1,4 @@
-# filemanager
+# golang filemanager
 
 work in progress...nothing yet done!!
 
