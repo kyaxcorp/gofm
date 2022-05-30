@@ -23,6 +23,9 @@ type FileManager struct {
 	//TablePrefix string
 	// TODO: add prefix to the tables
 
+	Locations        Locations
+	LocationsIndexed map[string]Location
+
 	// TODO: check if this is ok to have!
 	// fmError -> is the file manager error
 	fmError error

@@ -3,12 +3,11 @@ package gofm
 import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"io/fs"
 )
 
 type NewFile struct {
-	// File -> should be indicated, other params are optional!
-	File fs.File
+	// InputFile -> should be indicated, other params are optional!
+	InputFilePath string
 	// TODO : add here other methods of input like:
 	//       - bytes
 	//       - io
@@ -23,11 +22,25 @@ type NewFile struct {
 	//======= Optional ======= \\
 
 	// ========= Helpers =========\\
-	// by indicating File, it will be read from there
+	// by indicating InputFile, it will be read from there
 	// TODO: should we add here the locations where to be saved...
 	fileManager *FileManager
 	// ========= Helpers =========\\
 
+	//
+
+	// ========= Locations ==========\\
+	//Locations Locations
+	Locations []NewFileLocation
+}
+
+type NewFileLocation struct {
+	// this is the instance name
+	LocationName string
+	// add other options...
+
+	// Path -> is optional
+	Path string
 }
 
 // NewFile -> create a new file in the DB

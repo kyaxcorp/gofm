@@ -1,7 +1,5 @@
 package gofm
 
-import "log"
-
 // GetInstance -> it should be called once somewhere in the app?!
 // It checks for table structure
 func GetInstance(fm ...*FileManager) *FileManager {
@@ -14,7 +12,12 @@ func GetInstance(fm ...*FileManager) *FileManager {
 		_fm = &FileManager{}
 	}
 
-	log.Println(_fm)
+	//log.Println(_fm)
+
+	_fm.LocationsIndexed = make(map[string]Location)
+	for _, loc := range _fm.Locations {
+		_fm.LocationsIndexed[loc.Name] = loc
+	}
 
 	if _fm.DBAutoMigrate {
 		_fm.DatabaseAutoMigrate()
@@ -28,7 +31,7 @@ func (fm *FileManager) DatabaseAutoMigrate() {
 	// Migrate if necessary
 	fm.db().AutoMigrate(
 		&File{},
-		//&File{fileManager: fm},
+		//&InputFile{fileManager: fm},
 		//&Location{fileManager: fm},
 	)
 }

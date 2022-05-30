@@ -78,6 +78,12 @@ github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORN
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/pty v1.1.8/go.mod h1:O1sed60cT9XZ5uDucP5qwvh+TE3NnUj51EiZO/lmSfw=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
+github.com/kyaxcorp/gofile v0.0.1-20220530-0003 h1:Atpi68NqgQgEBh0wcYwQx5urhsGyrN6IRlU7JCH00WM=
+github.com/kyaxcorp/gofile v0.0.1-20220530-0003/go.mod h1:3ljPdCEYFRKDk0jFgQGkZTG3q2OO8i1yKty/i+i4kl4=
+github.com/kyaxcorp/gofile v0.0.1-20220530-0004 h1:diSHYKIeMsM53JykASPNN3DXqUA5RznkIqIQp/C3qCA=
+github.com/kyaxcorp/gofile v0.0.1-20220530-0004/go.mod h1:3ljPdCEYFRKDk0jFgQGkZTG3q2OO8i1yKty/i+i4kl4=
+github.com/kyaxcorp/gofile v0.0.1-20220530-0005 h1:SlT4HNCWi9Ndj80JJRqemPtb8E72eLsXuZf8aDhDlk0=
+github.com/kyaxcorp/gofile v0.0.1-20220530-0005/go.mod h1:3ljPdCEYFRKDk0jFgQGkZTG3q2OO8i1yKty/i+i4kl4=
 github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.1.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.2.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=

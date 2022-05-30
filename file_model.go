@@ -22,7 +22,7 @@ Create new file:
 Move FIle:
 
 
-File Explorer
+InputFile Explorer
 */
 
 /*
@@ -102,6 +102,9 @@ type File struct {
 
 	//EncryptionPassword string
 	//EncryptionAlgo     string
+
+	FileCreatedAt *time.Time `gorm:"null;index:idx_core_dates;<-:create"`
+	FileUpdatedAt *time.Time `gorm:"null;index:idx_core_dates"`
 
 	CreatedAt *time.Time `gorm:"null;index:idx_core_dates;<-:create"`
 	UpdatedAt *time.Time `gorm:"null;index:idx_core_dates"`

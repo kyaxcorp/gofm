@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm/schema"
 )
 
+//type Locations []Location
 type Locations []Location
 
 // Scan -> this is the func which is called when it's necessary to read from the Database to

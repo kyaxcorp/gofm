@@ -1,5 +1,10 @@
 package gofm
 
+import (
+	"github.com/kyaxcorp/gofile/driver"
+	"github.com/kyaxcorp/gofile/driver/filesystem"
+)
+
 /*
 We should have functions that:
 - Allow us to read and save a file in chunks, the reading will not be performed instantly in the memory, but it will be read
@@ -9,51 +14,71 @@ We should have functions that:
 
 // Save -> saves the input file to the location (destination)
 func (f *NewFile) Save() (*File, error) {
-
-	/*
-		1. Detect content-type
-		2. Set File Manager Instance Name
-		3. Get the physical file!
-		4. Check if everything is ok with the physical file
-		5.
-	*/
-
-	fileMetaData, _err := GetFileMetaData(f.File)
+	currentLocation := filesystem.Location{DirPath: ""}
+	srcFile, _err := currentLocation.FindFile(f.InputFilePath)
 	if _err != nil {
 		return nil, _err
 	}
+	fileMetaData := srcFile.Info()
 
-	file := &File{
-		FMInstance:   f.fileManager.Name,
-		Name:         fileMetaData.Name,
-		Description:  f.Description,
-		CategoryID:   f.CategoryID,
-		FullName:     fileMetaData.BaseName,
-		OriginalName: fileMetaData.BaseName,
-		Size:         fileMetaData.Size,
-		Extension:    fileMetaData.Extension,
-		ContentType:  fileMetaData.ContentType,
+	/*fileMetaData, _err := filesystem.NewFileInfo(f.InputFilePath)
+	if _err != nil {
+		return nil, _err
+	}*/
+
+	updatedAt := fileMetaData.UpdatedAt()
+	createdAt := fileMetaData.CreatedAt()
+
+	fileName := fileMetaData.Name()
+	if f.Name != "" {
+		fileName = f.Name
 	}
 
-	// 1. Save the file to the storage
-	// 2. after saving the file to the storage should
-	// Use Transaction!?
-	// we should first generate a new id
+	file := &File{
+		FMInstance:    f.fileManager.Name,
+		Name:          fileName,
+		Description:   f.Description,
+		CategoryID:    f.CategoryID,
+		FullName:      fileMetaData.FullName(),
+		OriginalName:  fileMetaData.FullName(),
+		Size:          fileMetaData.Size(),
+		Extension:     fileMetaData.Extension(),
+		ContentType:   fileMetaData.ContentType(),
+		FileUpdatedAt: &updatedAt,
+		FileCreatedAt: &createdAt,
+	}
 
 	// we will first copy the files to the locations (destinations) and after that make an insert into the db if success!
+
+	if len(f.Locations) == 0 {
+		return nil, ErrFmNewFileLocationMissing
+	}
+
+	// Copy in all mentioned locations
+	for _, destLoc := range f.Locations {
+		if loc, ok := f.fileManager.LocationsIndexed[destLoc.LocationName]; ok {
+			//
+
+			newFile, _err := loc.Driver.CopyFile(srcFile, driver.FileDestination{
+				Path: "", // TODO: we should indicate the new path name if that's a filesystem... or any other
+				// that contains path
+				FileMode: 0751,
+			})
+			if _err != nil {
+				// Failed to copy...
+				return nil, _err
+			}
+
+			// let's get info about the new file
+			newFile.Info()
+		}
+	}
 
 	dbResult := f.db().Save(file)
 	if dbResult.Error != nil {
 		// TODO: set the error...
 		return nil, dbResult.Error
 	}
-
-	// Now let's try saving the file
-	// if failed, let's delete the inserted record in db!?
-	// why don't we use transactions!? because transaction are slow -> if using for cluster, they'll be even slower...
-	// 1.  we don't do so many operations over here...
-	// 2. files can be quite large, and saving to the new location sometimes can take some time, but if starting the
-	// 	  transaction
 
 	return file, nil
 }

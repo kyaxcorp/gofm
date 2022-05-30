@@ -3,7 +3,7 @@ package gofm
 // Let's define all necessary functions
 /*
 
-// File Functions:
+// InputFile Functions:
 Copy
 Move (Cut,Paste)
 Delete

@@ -1,14 +1,25 @@
 package gofm
 
+import (
+	"github.com/kyaxcorp/gofile/driver"
+)
+
 type Location struct {
 	// this is used driver name
-	DriverType string
+	//DriverType string
+	// Name -> the name is the identity
+	Name string
+
+	// TODO: let's describe here how the files will be saved!
+	// save as YYYY/mm/dd folders and UUID
+	// save as YYYY/mm/dd folders and OriginalFileName
+	// save as YYYY/mm/dd folders and OriginalFileName + Incremented one
 
 	fileManager *FileManager `gorm:"-"`
 
 	// the driver is the one that creates the bridge between the client and the destination server (location)
 	// this is the instance with which the will interact
-	driver DriverFileInterface
+	Driver driver.LocationInterface
 }
 
 // TableName -> Get the Database table name from the file manager

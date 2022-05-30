@@ -3,12 +3,12 @@ package gofm
 import "errors"
 
 var (
-	// =============== File Manager Errors ===============\\
+	// =============== InputFile Manager Errors ===============\\
 
-	ErrFmDatabaseClientError = errors.New("file manager database client error") // TODO: should be renamed or adapted
-	ErrFmFileNotFound        = errors.New("file manager file not found")
-
-	// =============== File Manager Errors ===============\\
+	ErrFmDatabaseClientError    = errors.New("file manager database client error") // TODO: should be renamed or adapted
+	ErrFmFileNotFound           = errors.New("file manager file not found")
+	ErrFmNewFileLocationMissing = errors.New("file manager file location missing")
+	// =============== InputFile Manager Errors ===============\\
 
 	//
 )
