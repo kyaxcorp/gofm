@@ -62,8 +62,6 @@ type DriverFileInterface interface {
 	//DeleteDir()
 }
 
-type UUID uuid.UUID
-
 func (UUID) GormDBDataType(db *gorm.DB, field *schema.Field) string {
 	// use field.Tag, field.TagSettings gets field's tags
 	// checkout https://github.com/go-gorm/gorm/blob/master/schema/field.go for all options

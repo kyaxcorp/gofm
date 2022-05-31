@@ -65,4 +65,11 @@ func TestFileManager(t *testing.T) {
 		return
 	}
 	log.Println("id", f.ID)
+
+	foundFile, _err := fm.FindFile(FindFileOptions{ID: f.ID})
+	if _err != nil {
+		t.Error(_err, fm.GetInternalError())
+		return
+	}
+	log.Println("found file ID", foundFile.ID)
 }
