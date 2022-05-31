@@ -52,7 +52,7 @@ func (f *NewFile) Save() (*File, error) {
 		// Delete the folder and the files inside it after copying the destination locations
 		defer helper.FolderDelete(tmpFolder)
 		// Write the file to that generated folder
-		tmpFileFullPath := tmpFolder + graphFile.Filename
+		tmpFileFullPath := tmpFolder + filepath.FromSlash("/") + graphFile.Filename
 		_err = os.WriteFile(tmpFileFullPath, fileData, 0751)
 		if _err != nil {
 			return nil, _err
