@@ -19,7 +19,13 @@ func TestFileManager(t *testing.T) {
 	loc := Location{
 		Name: "local",
 		Driver: &filesystem.Location{
-			DirPath: "./newpath/subpath",
+			DirPath: "./newpath/loc1",
+		},
+	}
+	loc2 := Location{
+		Name: "local2",
+		Driver: &filesystem.Location{
+			DirPath: "./newpath/loc2",
 		},
 	}
 
@@ -36,7 +42,7 @@ func TestFileManager(t *testing.T) {
 		DBAutoMigrate: true,
 		Name:          "instance1",
 		// Define file manager locations
-		Locations: Locations{loc},
+		Locations: Locations{loc, loc2},
 	})
 
 	file := fm.NewFile()
@@ -47,8 +53,10 @@ func TestFileManager(t *testing.T) {
 		{
 			// Define the location instance name
 			LocationName: "local",
-			//FilePath:     "./NEW_LICENSE", // TODO: let's indicate a template?!
-			// TODO: file mode?!
+		},
+		{
+			// Define the location instance name
+			LocationName: "local2",
 		},
 	}
 	f, _err := file.Save()
@@ -56,5 +64,5 @@ func TestFileManager(t *testing.T) {
 		t.Error(_err)
 		return
 	}
-	log.Println(f.ID)
+	log.Println("id", f.ID)
 }
