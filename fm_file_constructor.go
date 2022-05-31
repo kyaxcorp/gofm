@@ -39,8 +39,16 @@ type NewFileLocation struct {
 	LocationName string
 	// add other options...
 
-	// Path -> is optional
-	Path string
+	// if none of the lower params are indicated, it will take the current files basedir and it will
+	// recreate on the destination location
+	//========= Optional Params ===========\\
+	// DirPath -> is optional, a new folder path is indicated, the file name remains the same!
+	DirPath string
+
+	// FilePath -> is optional, a new full file path is indicated (it includes as the dir path)
+	FilePath string
+	//========= Optional Params ===========\\
+
 }
 
 // NewFile -> create a new file in the DB

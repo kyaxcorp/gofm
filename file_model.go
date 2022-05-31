@@ -3,6 +3,7 @@ package gofm
 import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 	"time"
 )
 
@@ -61,10 +62,26 @@ type DriverFileInterface interface {
 	//DeleteDir()
 }
 
+type UUID uuid.UUID
+
+func (UUID) GormDBDataType(db *gorm.DB, field *schema.Field) string {
+	// use field.Tag, field.TagSettings gets field's tags
+	// checkout https://github.com/go-gorm/gorm/blob/master/schema/field.go for all options
+
+	// returns different database type based on driver name
+	switch db.Dialector.Name() {
+	case "mysql", "sqlite":
+		return "varchar(16)"
+	case "postgres":
+		return "uuid"
+	}
+	return ""
+}
+
 type File struct {
 	// InstanceName, partitioning can be setup!
-	FMInstance string    `gorm:"primaryKey;type:varchar(50);not null;<-:create"`
-	ID         uuid.UUID `gorm:"primaryKey;not null;<-:create;default:gen_random_uuid()"`
+	FMInstance string `gorm:"primaryKey;size:50;not null;<-:create"`
+	ID         UUID   `gorm:"primaryKey;not null;<-:create"`
 
 	// File Name
 	Name string `gorm:"size:256"`
@@ -92,7 +109,8 @@ type File struct {
 
 	// these are the locations where the file is stored
 	// there can be multiple ones, having as a backup option or for read performance...
-	Locations Locations
+	//Locations Locations
+	Locations FileLocationsMeta
 
 	// TODO store meta data about the current file in the locations!
 	// TODO: should we create a MetaLocation?! which will contain info about how is stored in the location

@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/google/uuid v1.3.0
-	github.com/kyaxcorp/gofile v0.0.1-20220530-0005
+	github.com/kyaxcorp/gofile v0.0.1-20220531-0001
 	gorm.io/driver/postgres v1.3.6
 	gorm.io/gorm v1.23.5
 )
