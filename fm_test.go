@@ -19,7 +19,7 @@ func TestFileManager(t *testing.T) {
 	loc := Location{
 		Name: "local",
 		Driver: &filesystem.Location{
-			DirPath: ".",
+			DirPath: "./newpath/subpath",
 		},
 	}
 
@@ -47,7 +47,7 @@ func TestFileManager(t *testing.T) {
 		{
 			// Define the location instance name
 			LocationName: "local",
-			FilePath:     "./NEW_LICENSE", // TODO: let's indicate a template?!
+			//FilePath:     "./NEW_LICENSE", // TODO: let's indicate a template?!
 			// TODO: file mode?!
 		},
 	}

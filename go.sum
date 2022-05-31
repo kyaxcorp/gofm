@@ -88,6 +88,8 @@ github.com/kyaxcorp/gofile v0.0.1-20220530-0006 h1:s7i4lIcRhr2yJ6EdBxOmMDTm7Pcmv
 github.com/kyaxcorp/gofile v0.0.1-20220530-0006/go.mod h1:3ljPdCEYFRKDk0jFgQGkZTG3q2OO8i1yKty/i+i4kl4=
 github.com/kyaxcorp/gofile v0.0.1-20220531-0001 h1:GLi3965oTI664bPmIUasXAOVAtk3DY81Cnt4f1rDXfE=
 github.com/kyaxcorp/gofile v0.0.1-20220531-0001/go.mod h1:3ljPdCEYFRKDk0jFgQGkZTG3q2OO8i1yKty/i+i4kl4=
+github.com/kyaxcorp/gofile v0.0.1-20220531-0002 h1:2JU8RkdjqA6gy/Luq6JKBeHqf/UUtD0haOtygnH9sfY=
+github.com/kyaxcorp/gofile v0.0.1-20220531-0002/go.mod h1:3ljPdCEYFRKDk0jFgQGkZTG3q2OO8i1yKty/i+i4kl4=
 github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.1.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.2.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=

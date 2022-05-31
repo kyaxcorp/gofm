@@ -4,7 +4,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/kyaxcorp/gofile/driver"
 	"github.com/kyaxcorp/gofile/driver/filesystem"
-	"log"
 )
 
 /*
@@ -17,8 +16,7 @@ We should have functions that:
 // Save -> saves the input file to the location (destination)
 func (f *NewFile) Save() (*File, error) {
 	currentLocation := filesystem.Location{DirPath: ""}
-
-	log.Println(f.InputFilePath)
+	//log.Println(f.InputFilePath)
 	srcFile, _err := currentLocation.FindFile(f.InputFilePath)
 	if _err != nil {
 		return nil, _err
@@ -86,9 +84,6 @@ func (f *NewFile) Save() (*File, error) {
 				return nil, _err
 			}
 
-			// let's get info about the new file
-			// TODO: we should save
-
 			fileLocationsMeta = append(fileLocationsMeta, FileLocationMeta{
 				LocationName: destLoc.LocationName,
 				FileInfo:     newFile.Info().ToStruct(),
@@ -96,13 +91,13 @@ func (f *NewFile) Save() (*File, error) {
 		}
 	}
 
-	// TODO: in DB ar fi bine sa se salveze location instance name si + FileInfo
-	// TODO: apoi o sa fie nevoie de restabilit Fisierul pe baza la FileInfo cu ajutorul functiei FindFile
+	// in DB ar fi bine sa se salveze location instance name si + FileInfo
+	// apoi o sa fie nevoie de restabilit Fisierul pe baza la FileInfo cu ajutorul functiei FindFile
 	//
 
 	file.Locations = fileLocationsMeta
 
-	log.Println("saving file")
+	//log.Println("saving file")
 	dbResult := f.db().Save(file)
 	if dbResult.Error != nil {
 		// TODO: set the error...
