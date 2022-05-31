@@ -9,6 +9,7 @@ var (
 	ErrFmDBClientQueryFailed    = errors.New("file manager database client query failed") // TODO: should be renamed or adapted
 	ErrFmFileNotFound           = errors.New("file manager file not found")
 	ErrFmNewFileLocationMissing = errors.New("file manager file location missing")
+	ErrFmNoInputFile            = errors.New("file manager no input file")
 	// =============== InputFile Manager Errors ===============\\
 
 	//

@@ -4,6 +4,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/kyaxcorp/gofile/driver"
 	"github.com/kyaxcorp/gofile/driver/filesystem"
+	"github.com/kyaxcorp/gofile/driver/filesystem/helper"
+	"os"
+	"path/filepath"
 )
 
 /*
@@ -15,13 +18,54 @@ We should have functions that:
 
 // Save -> saves the input file to the location (destination)
 func (f *NewFile) Save() (*File, error) {
+
 	currentLocation := filesystem.Location{DirPath: ""}
-	//log.Println(f.InputFilePath)
-	srcFile, _err := currentLocation.FindFile(f.InputFilePath)
+	var fileMetaData driver.FileInfoInterface
+	var srcFile driver.FileInterface
+	var _err error
+	if f.InputFilePath != "" {
+		//log.Println(f.InputFilePath)
+		srcFile, _err = currentLocation.FindFile(f.InputFilePath)
+	} else if f.GraphQLFile != nil {
+		// save to a tmp path and then delete it
+		graphFile := f.GraphQLFile
+		fileData := make([]byte, graphFile.Size)
+		// Read the file, ano now let's save it
+		_, _err = graphFile.File.Read(fileData)
+		if _err != nil {
+			return nil, _err
+		}
+
+		// Generate a random folder id (name)
+		tmpFolderID, _err := uuid.NewRandom()
+		if _err != nil {
+			return nil, _err
+		}
+		// create the temporary folder where to save the file
+		tmpFolder := os.TempDir() + filepath.FromSlash("/") + tmpFolderID.String()
+		if !helper.FolderExists(tmpFolder) {
+			_err = helper.MkDir(tmpFolder, 0751)
+			if _err != nil {
+				return nil, _err
+			}
+		}
+		// Delete the folder and the files inside it after copying the destination locations
+		defer helper.FolderDelete(tmpFolder)
+		// Write the file to that generated folder
+		tmpFileFullPath := tmpFolder + graphFile.Filename
+		_err = os.WriteFile(tmpFileFullPath, fileData, 0751)
+		if _err != nil {
+			return nil, _err
+		}
+		srcFile, _err = currentLocation.FindFile(tmpFileFullPath)
+	} else {
+		return nil, ErrFmNoInputFile
+	}
+
 	if _err != nil {
 		return nil, _err
 	}
-	fileMetaData := srcFile.Info()
+	fileMetaData = srcFile.Info()
 
 	/*fileMetaData, _err := filesystem.NewFileInfo(f.InputFilePath)
 	if _err != nil {
@@ -68,6 +112,8 @@ func (f *NewFile) Save() (*File, error) {
 
 	var fileLocationsMeta FileLocationsMeta
 
+	locationFileName := id.String() + "_" + fileMetaData.FullName()
+
 	// Copy in all mentioned locations
 	for _, destLoc := range f.Locations {
 		if loc, ok := f.fileManager.LocationsIndexed[destLoc.LocationName]; ok {
@@ -75,6 +121,7 @@ func (f *NewFile) Save() (*File, error) {
 
 			newFile, _err := loc.Driver.CopyFile(srcFile, driver.FileDestination{
 				// the path may be empty...
+				FileName: locationFileName,
 				FilePath: destLoc.FilePath,
 				DirPath:  destLoc.DirPath,
 				// that contains path

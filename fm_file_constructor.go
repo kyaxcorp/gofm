@@ -1,6 +1,7 @@
 package gofm
 
 import (
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -8,6 +9,7 @@ import (
 type NewFile struct {
 	// InputFile -> should be indicated, other params are optional!
 	InputFilePath string
+	GraphQLFile   *graphql.Upload
 	// TODO : add here other methods of input like:
 	//       - bytes
 	//       - io
