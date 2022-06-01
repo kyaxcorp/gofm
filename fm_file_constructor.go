@@ -2,7 +2,6 @@ package gofm
 
 import (
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -10,17 +9,22 @@ type NewFile struct {
 	// InputFile -> should be indicated, other params are optional!
 	InputFilePath string
 	GraphQLFile   *graphql.Upload
+
+	// FileModel - asta e modelul din partea la client...
+	FileModel interface{}
+
 	// TODO : add here other methods of input like:
 	//       - bytes
 	//       - io
 
 	//======= Optional ======= \\
 	// Name -> can
-	Name        string
-	Description string
-	CategoryID  *uuid.UUID
-	// Extension -> is needed only when a physical file is not provided, but a Bytes input has been provided
-	Extension string
+	// TODO: parametrii acestia pot fi scosi.. pentru ca ei pot fi scrisi insasi in Model
+	//Name        string
+	//Description string
+	//CategoryID  *uuid.UUID
+	//// Extension -> is needed only when a physical file is not provided, but a Bytes input has been provided
+	//Extension string
 	//======= Optional ======= \\
 
 	// ========= Helpers =========\\
@@ -34,6 +38,8 @@ type NewFile struct {
 	// ========= Locations ==========\\
 	//Locations Locations
 	Locations []NewFileLocation
+	// ========= Locations ==========\\
+
 }
 
 type NewFileLocation struct {

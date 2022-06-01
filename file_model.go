@@ -131,6 +131,10 @@ type File struct {
 	DeletedByID *uuid.UUID `gorm:"null"`
 }
 
+func (f *File) SetFileManager(fm *FileManager) {
+	f.fileManager = fm
+}
+
 // TableName -> Get the Database table name from the file manager
 // https://gorm.io/docs/conventions.html -> NOTE TableName doesn’t allow dynamic name, its result will be cached for future, to use dynamic name, you can use Scopes, for example:
 func (f *File) TableName() string {

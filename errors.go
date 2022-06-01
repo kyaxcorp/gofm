@@ -5,11 +5,12 @@ import "errors"
 var (
 	// =============== InputFile Manager Errors ===============\\
 
-	ErrFmDatabaseClientError    = errors.New("file manager database client error")        // TODO: should be renamed or adapted
-	ErrFmDBClientQueryFailed    = errors.New("file manager database client query failed") // TODO: should be renamed or adapted
-	ErrFmFileNotFound           = errors.New("file manager file not found")
-	ErrFmNewFileLocationMissing = errors.New("file manager file location missing")
-	ErrFmNoInputFile            = errors.New("file manager no input file")
+	ErrFmDatabaseClientError             = errors.New("file manager database client error")        // TODO: should be renamed or adapted
+	ErrFmDBClientQueryFailed             = errors.New("file manager database client query failed") // TODO: should be renamed or adapted
+	ErrFmFileNotFound                    = errors.New("file manager file not found")
+	ErrFmNewFileLocationMissing          = errors.New("file manager file location missing")
+	ErrFmNoInputFile                     = errors.New("file manager no input file")
+	ErrFileModelShouldBePointerOfAStruct = errors.New("file manager file model should be pointer of a struct")
 	// =============== InputFile Manager Errors ===============\\
 
 	//
