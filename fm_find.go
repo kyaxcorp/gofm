@@ -15,10 +15,9 @@ type FindFileOptions struct {
 // if nothing is found, an error will be returned
 // this function may be deprecated because retrieving files can be done natively from the gorm from the app side
 // where multiple parameters can be set by the user
-func (fm *FileManager) FindFile(o FindFileOptions) (*File, error) {
+func (fm *FileManager) FindFile(db *gorm.DB) (*File, error) {
 	var file File
-	dbResult := fm.DB().
-		Where(o).
+	dbResult := db.
 		Where("fm_instance = ?", fm.Name).
 		First(&file)
 	if dbResult.Error != nil {
@@ -29,6 +28,19 @@ func (fm *FileManager) FindFile(o FindFileOptions) (*File, error) {
 		}
 	}
 	return &file, nil
+}
+
+// Is it relevant?! posibil ca trebuie de scos...
+func (fm *FileManager) FindFirstFile(db *gorm.DB, fileModel interface{}) error {
+	dbResult := db.First(fileModel)
+	if dbResult.Error != nil {
+		if errors.Is(dbResult.Error, gorm.ErrRecordNotFound) {
+			return fm.setError(ErrFmFileNotFound, dbResult.Error)
+		} else {
+			return fm.setError(ErrFmDBClientQueryFailed, dbResult.Error)
+		}
+	}
+	return nil
 }
 
 func (fm *FileManager) StartFind() *gorm.DB {

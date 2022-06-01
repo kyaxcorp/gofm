@@ -92,16 +92,19 @@ func (f *NewFile) Save() error {
 		return errors.New("field Name doesn't exist in the file model")
 	}
 
+	// Check if the user has set any value for Name
 	nameVal := fieldModelIndirect.FieldByName("Name").String()
 	if nameVal != "" {
 		fileName = nameVal
+	} else {
+		fileName = fileMetaData.Name()
 	}
 
 	// Set Name
-	_err = structSetFieldVal(fieldModelIndirect, "Name", fileName)
+	/*_err = structSetFieldVal(fieldModelIndirect, "Name", fileName)
 	if _err != nil {
 		return _err
-	}
+	}*/
 
 	// Generate a new file id
 	id, _err := uuid.NewRandom()
