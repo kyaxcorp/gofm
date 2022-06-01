@@ -31,7 +31,7 @@ func (fm *FileManager) FindFile(o FindFileOptions) (*File, error) {
 	return &file, nil
 }
 
-func (fm *FileManager) StartFind(o FindFileOptions) *gorm.DB {
+func (fm *FileManager) StartFind() *gorm.DB {
 	return fm.DB().Where("fm_instance = ?", fm.Name)
 }
 
