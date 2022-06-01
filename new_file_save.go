@@ -86,18 +86,15 @@ func (f *NewFile) Save() error {
 	updatedAt := fileMetaData.UpdatedAt()
 	createdAt := fileMetaData.CreatedAt()
 
-	fileName := fileMetaData.Name()
-
 	if !structFieldExists(fieldModelIndirect, "Name") {
 		return errors.New("field Name doesn't exist in the file model")
 	}
 
+	fileName := fileMetaData.Name()
 	// Check if the user has set any value for Name
 	nameVal := fieldModelIndirect.FieldByName("Name").String()
 	if nameVal != "" {
 		fileName = nameVal
-	} else {
-		fileName = fileMetaData.Name()
 	}
 
 	// Set Name
