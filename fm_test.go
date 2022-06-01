@@ -29,7 +29,7 @@ func TestFileManager(t *testing.T) {
 		},
 	}
 
-	// Get the db client
+	// Get the DB client
 	db, _err := getTestDBClient()
 	if _err != nil {
 		t.Error(_err)

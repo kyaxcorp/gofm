@@ -52,7 +52,7 @@ func (FileLocationsMeta) GormDataType() string {
 	return "bytes"
 }
 
-// GormDBDataType gorm db data type
+// GormDBDataType gorm DB data type
 // This is the Database data type which is sent to the DB
 func (FileLocationsMeta) GormDBDataType(db *gorm.DB, field *schema.Field) string {
 	switch db.Dialector.Name() {

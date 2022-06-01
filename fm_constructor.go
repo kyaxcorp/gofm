@@ -29,7 +29,7 @@ func GetInstance(fm ...*FileManager) *FileManager {
 // DatabaseAutoMigrate - create all necessary tables, alter,add columns
 func (fm *FileManager) DatabaseAutoMigrate() {
 	// Migrate if necessary
-	fm.db().AutoMigrate(
+	fm.DB().AutoMigrate(
 		&File{},
 		//&InputFile{fileManager: fm},
 		//&Location{fileManager: fm},

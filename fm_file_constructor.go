@@ -68,5 +68,5 @@ func (fm *FileManager) NewFile() *NewFile {
 }
 
 func (f *NewFile) db() *gorm.DB {
-	return f.fileManager.db()
+	return f.fileManager.DB()
 }

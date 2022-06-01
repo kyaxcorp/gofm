@@ -160,7 +160,7 @@ func (f *NewFile) Save() error {
 		fileManager: f.fileManager,
 	}*/
 
-	// we will first copy the files to the locations (destinations) and after that make an insert into the db if success!
+	// we will first copy the files to the locations (destinations) and after that make an insert into the DB if success!
 
 	if len(f.Locations) == 0 {
 		return ErrFmNewFileLocationMissing

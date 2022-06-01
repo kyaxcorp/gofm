@@ -13,9 +13,11 @@ type FindFileOptions struct {
 
 // FindFile -> it will search for the described file in the database
 // if nothing is found, an error will be returned
+// this function may be deprecated because retrieving files can be done natively from the gorm from the app side
+// where multiple parameters can be set by the user
 func (fm *FileManager) FindFile(o FindFileOptions) (*File, error) {
 	var file File
-	dbResult := fm.db().
+	dbResult := fm.DB().
 		Where(o).
 		Where("fm_instance = ?", fm.Name).
 		First(&file)
@@ -29,6 +31,10 @@ func (fm *FileManager) FindFile(o FindFileOptions) (*File, error) {
 	return &file, nil
 }
 
+func (fm *FileManager) StartFind(o FindFileOptions) *gorm.DB {
+	return fm.DB().Where("fm_instance = ?", fm.Name)
+}
+
 type FindFilesOptions struct {
 	ID   UUID
 	Name string
@@ -37,6 +43,6 @@ type FindFilesOptions struct {
 // FindFiles -> TODO:
 func (fm *FileManager) FindFiles(o FindFilesOptions) *File {
 	var file File
-	fm.db().Where(o).First(&file)
+	fm.DB().Where(o).First(&file)
 	return nil
 }

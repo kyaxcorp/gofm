@@ -143,5 +143,5 @@ func (f *File) TableName() string {
 }
 
 func (f *File) db() *gorm.DB {
-	return f.fileManager.db()
+	return f.fileManager.DB()
 }
