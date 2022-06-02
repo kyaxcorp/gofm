@@ -22,7 +22,7 @@ require (
 	github.com/jackc/pgx/v4 v4.16.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/kyaxcorp/gofile v0.0.1-20220601-0001 // indirect
+	github.com/kyaxcorp/gofile v0.0.1-20220602-0002 // indirect
 	github.com/matryer/moq v0.2.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/urfave/cli/v2 v2.8.1 // indirect

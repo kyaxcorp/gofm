@@ -2,37 +2,29 @@ package gofm
 
 import (
 	"errors"
+	gofileDriver "github.com/kyaxcorp/gofile/driver"
 	"gorm.io/gorm"
+	"reflect"
 )
-
-type FindFileOptions struct {
-	//ID   uuid.UUID
-	ID   UUID
-	Name string
-}
 
 // FindFile -> it will search for the described file in the database
 // if nothing is found, an error will be returned
-// this function may be deprecated because retrieving files can be done natively from the gorm from the app side
-// where multiple parameters can be set by the user
-func (fm *FileManager) FindFile(db *gorm.DB) (*File, error) {
-	var file File
-	dbResult := db.
-		Where("fm_instance = ?", fm.Name).
-		First(&file)
-	if dbResult.Error != nil {
-		if errors.Is(dbResult.Error, gorm.ErrRecordNotFound) {
-			return nil, fm.setError(ErrFmFileNotFound, dbResult.Error)
-		} else {
-			return nil, fm.setError(ErrFmDBClientQueryFailed, dbResult.Error)
-		}
-	}
-	return &file, nil
-}
+func (fm *FileManager) FindFile(fileModel interface{}, cb func(db *gorm.DB) *gorm.DB) error {
+	fileModelVal := reflect.ValueOf(fileModel)
 
-// Is it relevant?! posibil ca trebuie de scos...
-func (fm *FileManager) FindFirstFile(db *gorm.DB, fileModel interface{}) error {
-	dbResult := db.First(fileModel)
+	// first of all, check if the FileModel is a pointer of a struct!
+	if fileModelVal.Kind() != reflect.Ptr {
+		return ErrFileModelShouldBePointerOfAStruct
+	}
+	fieldModelIndirect := reflect.Indirect(fileModelVal)
+
+	db := fm.DB().Where("fm_instance = ?", fm.Name)
+
+	// Exec the Callback
+	db = cb(db)
+
+	dbResult := db.
+		First(fileModel)
 	if dbResult.Error != nil {
 		if errors.Is(dbResult.Error, gorm.ErrRecordNotFound) {
 			return fm.setError(ErrFmFileNotFound, dbResult.Error)
@@ -40,21 +32,67 @@ func (fm *FileManager) FindFirstFile(db *gorm.DB, fileModel interface{}) error {
 			return fm.setError(ErrFmDBClientQueryFailed, dbResult.Error)
 		}
 	}
-	return nil
-}
+	// set the fileManager back to the fileModel!
+	// why it needs it? because it will call some functions of reading the files from the locations
+	if _model, ok := fileModel.(interface{ SetFileManager(fm *FileManager) }); ok {
+		_model.SetFileManager(fm)
+	}
 
-func (fm *FileManager) StartFind() *gorm.DB {
-	return fm.DB().Where("fm_instance = ?", fm.Name)
-}
+	locations, _err := structGetFieldVal(fieldModelIndirect, "Locations")
+	if _err != nil {
+		return _err
+	}
+	locationsMeta := locations.(FileLocationsMeta)
+	// let's also index the current locations for faster finding...
+	// the fileModel it's a PTR
+	locationsIndexed := make(map[LocationName]FileLocationMeta)
+	filesIndexed := make(map[LocationName]gofileDriver.FileInterface)
+	var defaultFile gofileDriver.FileInterface
 
-type FindFilesOptions struct {
-	ID   UUID
-	Name string
-}
+	for _, locMeta := range locationsMeta {
+		// let's get the location from the file manager instance
 
-// FindFiles -> TODO:
-func (fm *FileManager) FindFiles(o FindFilesOptions) *File {
-	var file File
-	fm.DB().Where(o).First(&file)
+		if loc, ok := fm.LocationsIndexed[locMeta.LocationName]; ok {
+			file, _err := loc.Driver.FileFromInfo(locMeta.FileInfo)
+			// TODO: should we return  the error?! or we simply continue!
+			if _err != nil {
+				// We continue because the location that was provided before doesn't exist in the file manager
+				continue
+			}
+			if defaultFile == nil {
+				defaultFile = file
+			}
+
+			filesIndexed[LocationName(locMeta.LocationName)] = file
+		}
+
+		// Index the location
+		locationsIndexed[LocationName(locMeta.LocationName)] = locMeta
+	}
+
+	if _model, ok := fileModel.(interface {
+		SetLocationsIndexed(locations map[LocationName]FileLocationMeta)
+	}); ok {
+		_model.SetLocationsIndexed(locationsIndexed)
+	}
+
+	if _model, ok := fileModel.(interface {
+		SetFilesIndexed(files map[LocationName]gofileDriver.FileInterface)
+	}); ok {
+		_model.SetFilesIndexed(filesIndexed)
+	}
+
+	// set the default file
+	if _model, ok := fileModel.(interface {
+		SetDefaultFile(file gofileDriver.FileInterface)
+	}); ok {
+		_model.SetDefaultFile(defaultFile)
+	}
+
+	// ar fi bine aici sa intoarcem si locatiile ca interfete pentru ca functiile sa se cheme direct...
+
+	// TODO: we should test this...
+	//structSetFieldVal(fieldModelIndirect,"locationsIndexed",locationsIndexed)
+
 	return nil
 }

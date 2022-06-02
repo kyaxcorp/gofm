@@ -8,11 +8,19 @@ import (
 )
 
 func structFieldExists(obj reflect.Value, fieldName string) bool {
-	fName := obj.FieldByName("Name")
-	if fName == (reflect.Value{}) {
+	fieldVal := obj.FieldByName(fieldName)
+	if fieldVal == (reflect.Value{}) {
 		return false
 	}
 	return true
+}
+
+func structGetFieldVal(obj reflect.Value, fieldName string) (interface{}, error) {
+	fieldVal := obj.FieldByName(fieldName)
+	if fieldVal == (reflect.Value{}) {
+		return nil, errors.New("struct field doesn't exist")
+	}
+	return fieldVal.Interface(), nil
 }
 
 func structSetFieldVal(obj reflect.Value, fieldName string, fieldValue interface{}) error {

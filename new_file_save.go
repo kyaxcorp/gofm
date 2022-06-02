@@ -172,8 +172,9 @@ func (f *NewFile) Save() error {
 
 	// Copy in all mentioned locations
 	for _, destLoc := range f.Locations {
+		// Check if the defined location exists
 		if loc, ok := f.fileManager.LocationsIndexed[destLoc.LocationName]; ok {
-			//
+			// if the location is found in the file manager, let's copy the file to it
 
 			newFile, _err := loc.Driver.CopyFile(srcFile, driver.FileDestination{
 				// the path may be empty...

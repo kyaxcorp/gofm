@@ -125,6 +125,10 @@ github.com/kyaxcorp/gofile v0.0.1-20220531-0006 h1:JghGxPF/30mqJH2Gc302B508Z/KuP
 github.com/kyaxcorp/gofile v0.0.1-20220531-0006/go.mod h1:2No3+xz1EdDUOL7ThD+NQZ0bBVx7G+1BqWAd0iEz5r0=
 github.com/kyaxcorp/gofile v0.0.1-20220601-0001 h1:5fIREL91HqASvXEYO/pzxHT3zLBrgK2I7dXZVWotniI=
 github.com/kyaxcorp/gofile v0.0.1-20220601-0001/go.mod h1:2No3+xz1EdDUOL7ThD+NQZ0bBVx7G+1BqWAd0iEz5r0=
+github.com/kyaxcorp/gofile v0.0.1-20220602-0001 h1:F8lvwn813IyarnJvtsqchdDcCyAmyJIAWG+x7JA+HGQ=
+github.com/kyaxcorp/gofile v0.0.1-20220602-0001/go.mod h1:2No3+xz1EdDUOL7ThD+NQZ0bBVx7G+1BqWAd0iEz5r0=
+github.com/kyaxcorp/gofile v0.0.1-20220602-0002 h1:BIkIoD2S0fsHNcuX04ZOL3sdNAxZEFNEXxCJKAUu3cI=
+github.com/kyaxcorp/gofile v0.0.1-20220602-0002/go.mod h1:2No3+xz1EdDUOL7ThD+NQZ0bBVx7G+1BqWAd0iEz5r0=
 github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.1.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/lib/pq v1.2.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=

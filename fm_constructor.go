@@ -14,6 +14,7 @@ func GetInstance(fm ...*FileManager) *FileManager {
 
 	//log.Println(_fm)
 
+	// Index the locations...
 	_fm.LocationsIndexed = make(map[string]Location)
 	for _, loc := range _fm.Locations {
 		_fm.LocationsIndexed[loc.Name] = loc

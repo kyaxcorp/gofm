@@ -2,6 +2,7 @@ package gofm
 
 import (
 	"github.com/google/uuid"
+	gofileDriver "github.com/kyaxcorp/gofile/driver"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"time"
@@ -76,6 +77,8 @@ func (UUID) GormDBDataType(db *gorm.DB, field *schema.Field) string {
 	return ""
 }
 
+type LocationName string
+
 type File struct {
 	// InstanceName, partitioning can be setup!
 	FMInstance string `gorm:"primaryKey;size:50;not null;<-:create"`
@@ -109,6 +112,13 @@ type File struct {
 	// there can be multiple ones, having as a backup option or for read performance...
 	//Locations Locations
 	Locations FileLocationsMeta
+	// We are using it on reading
+	locationsIndexed map[LocationName]FileLocationMeta
+
+	// files -> indexed by location name
+	files map[LocationName]gofileDriver.FileInterface
+	// defaultFile -> this is the first file found in the array
+	defaultFile gofileDriver.FileInterface
 
 	// TODO store meta data about the current file in the locations!
 	// TODO: should we create a MetaLocation?! which will contain info about how is stored in the location
@@ -135,6 +145,18 @@ func (f *File) SetFileManager(fm *FileManager) {
 	f.fileManager = fm
 }
 
+func (f *File) SetLocationsIndexed(locations map[LocationName]FileLocationMeta) {
+	f.locationsIndexed = locations
+}
+
+func (f *File) SetFilesIndexed(files map[LocationName]gofileDriver.FileInterface) {
+	f.files = files
+}
+
+func (f *File) SetDefaultFile(file gofileDriver.FileInterface) {
+	f.defaultFile = file
+}
+
 // TableName -> Get the Database table name from the file manager
 // https://gorm.io/docs/conventions.html -> NOTE TableName doesn’t allow dynamic name, its result will be cached for future, to use dynamic name, you can use Scopes, for example:
 func (f *File) TableName() string {
@@ -144,4 +166,16 @@ func (f *File) TableName() string {
 
 func (f *File) db() *gorm.DB {
 	return f.fileManager.DB()
+}
+
+// ReadFromLoc -> sa citeasca din anumita locatie...
+func (f *File) GetFromLoc(locName string) (gofileDriver.FileInterface, bool) {
+	if file, ok := f.files[LocationName(locName)]; ok {
+		return file, ok
+	}
+	return nil, false
+}
+
+func (f *File) Get() gofileDriver.FileInterface {
+	return f.defaultFile
 }
