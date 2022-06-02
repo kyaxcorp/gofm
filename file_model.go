@@ -186,3 +186,21 @@ func (f *File) Read() ([]byte, error) {
 	}
 	return f.defaultFile.Read()
 }
+
+// GetTmpFilePath -> it will return a tmp file path which after it will be auto destroyed
+func (f *File) GetTmpFilePath() (string, error) {
+	data, _err := f.Read()
+	if _err != nil {
+		return "", _err
+	}
+	tmpFileFullPath, _err := generateTmpFile(temporaryFileOptions{
+		SelfDestruct:   true,
+		SelfDestructIn: time.Second * 30,
+		FileName:       f.FullName,
+		FileData:       data,
+	})
+	if _err != nil {
+		return "", _err
+	}
+	return tmpFileFullPath, nil
+}

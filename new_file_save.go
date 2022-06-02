@@ -6,7 +6,6 @@ import (
 	"github.com/kyaxcorp/gofile/driver"
 	"github.com/kyaxcorp/gofile/driver/filesystem"
 	"github.com/kyaxcorp/gofile/driver/filesystem/helper"
-	"os"
 	"path/filepath"
 	"reflect"
 )
@@ -48,26 +47,17 @@ func (f *NewFile) Save() error {
 		}
 
 		// Generate a random folder id (name)
-		tmpFolderID, _err := uuid.NewRandom()
+
+		tmpFileFullPath, _err := generateTmpFile(temporaryFileOptions{
+			FileName: graphFile.Filename,
+			FileData: fileData,
+		})
 		if _err != nil {
 			return _err
 		}
-		// create the temporary folder where to save the file
-		tmpFolder := os.TempDir() + filepath.FromSlash("/") + tmpFolderID.String()
-		if !helper.FolderExists(tmpFolder) {
-			_err = helper.MkDir(tmpFolder, 0751)
-			if _err != nil {
-				return _err
-			}
-		}
-		// Delete the folder and the files inside it after copying the destination locations
-		defer helper.FolderDelete(tmpFolder)
-		// Write the file to that generated folder
-		tmpFileFullPath := tmpFolder + filepath.FromSlash("/") + graphFile.Filename
-		_err = os.WriteFile(tmpFileFullPath, fileData, 0751)
-		if _err != nil {
-			return _err
-		}
+
+		defer helper.FolderDelete(filepath.Dir(tmpFileFullPath))
+
 		srcFile, _err = currentLocation.FindFile(tmpFileFullPath)
 	} else {
 		return ErrFmNoInputFile
