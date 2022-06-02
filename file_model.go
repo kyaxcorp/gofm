@@ -179,3 +179,10 @@ func (f *File) GetFromLoc(locName string) (gofileDriver.FileInterface, bool) {
 func (f *File) Get() gofileDriver.FileInterface {
 	return f.defaultFile
 }
+
+func (f *File) Read() ([]byte, error) {
+	if f.defaultFile == nil {
+		return nil, ErrFmFileNotFound
+	}
+	return f.defaultFile.Read()
+}
