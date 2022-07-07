@@ -50,6 +50,16 @@ func (u *UUID) Scan(src interface{}) error {
 	return nil
 }
 
+func (u *UUID) UnmarshalJSON(b []byte) error {
+	s := string(b)
+	_u, _err := uuid.Parse(s)
+	if _err != nil {
+		return _err
+	}
+	*u = UUID(_u)
+	return nil
+}
+
 // Value implements sql.Valuer so that UUIDs can be written to databases
 // transparently. Currently, UUIDs map to strings. Please consult
 // database-specific driver documentation for matching types.
